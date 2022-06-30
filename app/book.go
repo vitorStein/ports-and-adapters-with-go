@@ -1,6 +1,14 @@
 package app
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/asaskevich/govalidator"
+)
+
+func init() {
+	govalidator.SetFieldsRequiredByDefault(true)
+}
 
 type BookInterface interface {
 	IsValid() (bool, error)
@@ -18,15 +26,34 @@ const (
 )
 
 type Book struct {
-	ID     string
-	Name   string
-	Price  float32
-	Status string
+	ID     string  `valid:"uuidv4"`
+	Name   string  `valid:"required"`
+	Price  float32 `valid:"float, optional"`
+	Status string  `valid:"required"`
 }
 
-/* func (b *Book) IsValid() (bool, error) {
+func (b *Book) IsValid() (bool, error) {
 
-} */
+	if b.Status == "" {
+		b.Status = DISABLED
+	}
+
+	if b.Status != ENABLE && b.Status != DISABLED {
+		return false, errors.New("o status deve ser ENABLE ou DISABLED")
+	}
+
+	if b.Price < 0 {
+		return false, errors.New("o preço deve ser maior ou igual a 0")
+	}
+
+	_, err := govalidator.ValidateStruct(b)
+
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
 
 func (b *Book) Enable() error {
 	if b.Price > 0 {
