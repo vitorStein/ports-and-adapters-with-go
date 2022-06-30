@@ -36,9 +36,14 @@ func (b *Book) Enable() error {
 	return errors.New("O preço do livro deve ser maior que zero para habilitar o livro!")
 }
 
-/* func (b *Book) Disable() error {
+func (b *Book) Disable() error {
 
-} */
+	if b.Price == 0 {
+		b.Status = DISABLED
+		return nil
+	}
+	return errors.New("O preço do livro deve ser zero para ser desabilitado")
+}
 
 func (b *Book) GetID() string {
 	return b.ID
