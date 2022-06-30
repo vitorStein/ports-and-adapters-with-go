@@ -18,5 +18,5 @@ func TestBook_Enable(t *testing.T) {
 
 	book.Price = 0
 	err = book.Enable()
-	require.Equal(t, "O preço do livro deve ser maior que zero para habilitar o livro!", err.Error())
+	require.Equal(t, "o preço do livro deve ser maior que zero para habilitar o livro", err.Error())
 }
